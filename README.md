@@ -83,3 +83,44 @@ Severity statistics
 Live events
 SSE updates
 Investigation history
+
+Technology Stack
+Backend
+
+FastAPI
+Python
+SQLAlchemy
+Celery
+Redis
+PostgreSQL
+AI
+
+NVIDIA NIM
+Llama 3.1
+RAG
+ChromaDB
+Sentence Transformers
+Security
+
+Firebase Authentication
+JWT
+RBAC
+Audit Logging
+Rate Limiting
+Threat Intelligence
+
+MITRE ATT&CK
+CVEs
+Splunk
+Microsoft Sentinel
+Infrastructure
+
+Docker
+Docker Compose
+Neo4j
+Prometheus
+Frontend
+
+React
+ECharts
+Server Sent Events
