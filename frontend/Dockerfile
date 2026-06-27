@@ -1,0 +1,41 @@
+# ---------- Build stage ----------
+FROM node:20-alpine AS build
+WORKDIR /app
+
+# CRA reads REACT_APP_* at build time
+ARG REACT_APP_API_URL
+ARG REACT_APP_FIREBASE_API_KEY
+ARG REACT_APP_FIREBASE_AUTH_DOMAIN
+ARG REACT_APP_FIREBASE_PROJECT_ID
+ARG REACT_APP_FIREBASE_STORAGE_BUCKET
+ARG REACT_APP_FIREBASE_MESSAGING_SENDER_ID
+ARG REACT_APP_FIREBASE_APP_ID
+
+ENV REACT_APP_API_URL=${REACT_APP_API_URL}
+ENV REACT_APP_FIREBASE_API_KEY=${REACT_APP_FIREBASE_API_KEY}
+ENV REACT_APP_FIREBASE_AUTH_DOMAIN=${REACT_APP_FIREBASE_AUTH_DOMAIN}
+ENV REACT_APP_FIREBASE_PROJECT_ID=${REACT_APP_FIREBASE_PROJECT_ID}
+ENV REACT_APP_FIREBASE_STORAGE_BUCKET=${REACT_APP_FIREBASE_STORAGE_BUCKET}
+ENV REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${REACT_APP_FIREBASE_MESSAGING_SENDER_ID}
+ENV REACT_APP_FIREBASE_APP_ID=${REACT_APP_FIREBASE_APP_ID}
+
+# Install deps first (better caching)
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copy source and build
+COPY . .
+RUN npm run build
+
+
+# ---------- Runtime stage ----------
+FROM nginx:1.27-alpine
+
+# SPA routing (React Router) + reasonable defaults
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Static build output
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

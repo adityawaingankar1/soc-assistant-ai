@@ -1,0 +1,134 @@
+{
+  "incident_type": "APT_PERSISTENCE",
+  "version": 1,
+  "description": "Advanced persistent threat persistence, stealth tunneling, credential abuse, and long-dwell tradecraft response playbook.",
+  "severity_default": "HIGH",
+
+  "actions": [
+
+    {
+      "id": "apt_preserve_evidence",
+      "action": "Preserve volatile memory, persistence artifacts, Windows event logs, EDR telemetry, and authentication records before remediation.",
+      "owner_team": "DFIR",
+      "approval_level": "IR Lead",
+      "risk": "Low",
+      "requires_all": []
+    },
+
+    {
+      "id": "apt_scope_expansion",
+      "action": "Expand investigation scope to adjacent systems, privileged accounts, VPN access, jump hosts, and administrative sessions for lateral movement analysis.",
+      "owner_team": "SOC",
+      "approval_level": "SOC",
+      "risk": "Medium",
+      "requires_all": []
+    },
+
+    {
+      "id": "apt_hunt_persistence",
+      "action": "Hunt for persistence mechanisms including scheduled tasks, services, Run keys, startup folders, WMI subscriptions, and port proxy configurations.",
+      "owner_team": "Threat Hunting",
+      "approval_level": "SOC",
+      "risk": "Low",
+      "requires_all": []
+    },
+
+    {
+      "id": "apt_review_services",
+      "action": "Review recently created or modified Windows services, unsigned binaries, and anomalous service accounts on affected assets.",
+      "owner_team": "SOC",
+      "approval_level": "SOC",
+      "risk": "Low",
+      "requires_all": []
+    },
+
+    {
+      "id": "apt_hunt_frp",
+      "action": "Investigate FRP / reverse proxy tooling, SSH reverse tunnels, netsh portproxy usage, and encrypted outbound connections.",
+      "owner_team": "Network Security",
+      "approval_level": "SOC",
+      "risk": "Medium",
+      "requires_all": [
+        "has_tunneling_behavior"
+      ]
+    },
+
+    {
+      "id": "apt_review_rdp",
+      "action": "Review RDP activity, privileged logons, VPN authentication, and NTLM usage for potential credential abuse or unauthorized remote access.",
+      "owner_team": "IAM",
+      "approval_level": "IR Lead",
+      "risk": "Medium",
+      "requires_all": [
+        "has_credential_abuse"
+      ]
+    },
+
+    {
+      "id": "apt_ntds_hunt",
+      "action": "Investigate NTDS.dit access attempts, credential dumping behavior, and suspicious use of ntdsutil, esentutl, or volume shadow copy tooling.",
+      "owner_team": "DFIR",
+      "approval_level": "IR Lead",
+      "risk": "High",
+      "requires_all": [
+        "has_credential_abuse"
+      ]
+    },
+
+    {
+      "id": "apt_log_tampering",
+      "action": "Review event log clearing activity, wevtutil usage, and telemetry gaps that may indicate defense evasion.",
+      "owner_team": "SOC",
+      "approval_level": "SOC",
+      "risk": "Medium",
+      "requires_all": [
+        "has_persistence_tradecraft"
+      ]
+    },
+
+    {
+      "id": "apt_hash_hunting",
+      "action": "Search enterprise-wide for matching file hashes, process hashes, scheduled task references, and persistence binaries related to the investigation.",
+      "owner_team": "Threat Hunting",
+      "approval_level": "SOC",
+      "risk": "Low",
+      "requires_all": [
+        "has_advisory_hash_match"
+      ]
+    },
+
+    {
+      "id": "apt_network_segmentation",
+      "action": "Consider temporary segmentation or containment of affected systems if active tunneling, persistence, or credential abuse is confirmed.",
+      "owner_team": "IR",
+      "approval_level": "IR Lead",
+      "risk": "High",
+      "requires_all": [
+        "apt_tradecraft"
+      ]
+    },
+
+    {
+      "id": "apt_credential_rotation",
+      "action": "Prepare staged credential rotation for impacted administrative, service, and VPN accounts after forensic preservation is complete.",
+      "owner_team": "IAM",
+      "approval_level": "IR Lead",
+      "risk": "High",
+      "requires_all": [
+        "has_credential_abuse"
+      ]
+    },
+
+    {
+      "id": "apt_long_dwell_review",
+      "action": "Perform historical telemetry review (30–90 days) to identify signs of long dwell time, beaconing, or repeated administrative access.",
+      "owner_team": "Threat Hunting",
+      "approval_level": "SOC",
+      "risk": "Medium",
+      "requires_all": [
+        "apt_tradecraft"
+      ]
+    }
+
+  ]
+}

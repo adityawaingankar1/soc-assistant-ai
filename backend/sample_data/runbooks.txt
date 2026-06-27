@@ -1,0 +1,60 @@
+RUNBOOK: Ransomware Response Procedure
+Severity: CRITICAL
+Priority: P1 - Immediate Response Required
+
+Step 1 - DETECTION & TRIAGE (0-15 minutes)
+- Confirm ransomware indicators: mass file encryption, ransom note, vssadmin deleting shadow copies
+- Identify affected systems via EDR telemetry
+- Determine network spread scope (how many hosts affected?)
+
+Step 2 - CONTAINMENT (15-30 minutes)
+- IMMEDIATELY isolate affected endpoints from network via EDR
+- Block attacker C2 IPs/domains at firewall and proxy
+- Disable compromised user accounts
+- Notify incident response team and management
+
+Step 3 - ERADICATION (1-4 hours)
+- Identify patient zero (initial infection vector)
+- Remove malicious persistence mechanisms (scheduled tasks, registry run keys)
+- Scan all systems with updated AV signatures
+- Block IOCs enterprise-wide
+
+Step 4 - RECOVERY (4-24 hours)
+- Restore from clean backups (verify backup integrity first!)
+- Rebuild systems that cannot be cleaned
+- Reset all passwords for affected accounts
+- Verify no persistence remains before reconnecting to network
+
+Step 5 - POST-INCIDENT
+- Root cause analysis
+- Lessons learned documentation
+- Update detection rules based on observed TTPs
+- Executive briefing
+
+---
+
+RUNBOOK: Phishing Email Response
+Severity: HIGH
+Priority: P2
+
+Step 1 - Quarantine the phishing email across all mailboxes
+Step 2 - Identify all users who received AND opened the email
+Step 3 - For users who clicked/opened attachments: isolate workstations
+Step 4 - Search email gateway logs for similar emails (last 30 days)
+Step 5 - Block sender domain and all embedded URLs at email gateway
+Step 6 - Run forensic analysis on any opened attachments
+Step 7 - Check for credential harvesting — force password resets if needed
+Step 8 - User awareness notification to all employees
+
+---
+
+RUNBOOK: Lateral Movement Detection
+Severity: HIGH
+
+Step 1 - Map the scope: which systems has the attacker accessed?
+Step 2 - Identify compromised credentials being used
+Step 3 - Isolate affected network segment if possible
+Step 4 - Check for persistence on all accessed systems
+Step 5 - Reset all compromised credentials
+Step 6 - Enable enhanced logging across affected scope
+Step 7 - Threat hunt for additional compromise indicators

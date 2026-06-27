@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a0e1a" />
+    <meta
+      name="description"
+      content="AI-Powered SOC Assistant — Automated Security Incident Triage & Response Playbook Generator"
+    />
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon (security shield emoji as data URI) -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>"
+    />
+
+    <title>SOC Assistant — AI Security Triage</title>
+
+    <style>
+      /* Critical CSS for initial paint */
+      body {
+        margin: 0;
+        background-color: #0a0e1a;
+        color: #e2e8f0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      #root {
+        min-height: 100vh;
+      }
+
+      /* Loading screen */
+      #initial-loader {
+        position: fixed;
+        inset: 0;
+        background: #0a0e1a;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+
+      #initial-loader .logo {
+        font-size: 4rem;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+
+      #initial-loader .text {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #3b82f6;
+        letter-spacing: 0.05em;
+      }
+
+      #initial-loader .subtext {
+        font-size: 0.875rem;
+        color: #64748b;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <div style="padding: 2rem; text-align: center; color: #e2e8f0; background: #0a0e1a; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div>
+          <h1>🛡️ SOC Assistant</h1>
+          <p>JavaScript is required to run this application.</p>
+          <p>Please enable JavaScript in your browser settings.</p>
+        </div>
+      </div>
+    </noscript>
+
+    <!-- Initial loading screen (hidden once React mounts) -->
+    <div id="initial-loader">
+      <div class="logo">🛡️</div>
+      <div class="text">SOC ASSISTANT</div>
+      <div class="subtext">AI-Powered Security Triage</div>
+    </div>
+
+    <div id="root"></div>
+
+    <script>
+      // Hide loader when React mounts
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          var loader = document.getElementById('initial-loader');
+          if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(function() {
+              loader.style.display = 'none';
+            }, 500);
+          }
+        }, 300);
+      });
+    </script>
+  </body>
+</html>

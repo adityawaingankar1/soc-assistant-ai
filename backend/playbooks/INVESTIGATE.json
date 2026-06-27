@@ -1,0 +1,14 @@
+{
+  "incident_type": "INVESTIGATE",
+  "version": 2,
+  "actions": [
+    {
+      "id": "inv_preserve",
+      "action": "Collect additional telemetry (SIEM + host/network/IAM as applicable) to confirm or refute compromise.",
+      "owner_team": "SOC",
+      "approval_level": "SOC",
+      "risk": "Low",
+      "requires_all": []
+    }
+  ]
+}

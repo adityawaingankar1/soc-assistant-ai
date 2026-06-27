@@ -1,0 +1,47 @@
+INCIDENT REPORT: INC-2024-001
+Date: 2024-10-15
+Classification: Credential Theft via Phishing
+Severity: HIGH
+Outcome: Contained
+
+Summary: User in Finance department opened malicious Office macro from phishing email.
+Attacker extracted credentials and attempted to access financial systems.
+
+Timeline:
+- 09:15 - Phishing email received (disguised as invoice)
+- 09:32 - User opened attachment, macro executed
+- 09:34 - cmd.exe spawned from winword.exe
+- 09:40 - Credential dumping via mimikatz detected by EDR
+- 09:45 - Alert triggered, SOC began investigation
+- 10:15 - Endpoint isolated, user account disabled
+- 11:00 - Full scope determined (1 workstation affected)
+- 14:00 - System reimaged, credentials reset, incident closed
+
+MITRE TTPs: T1566.001, T1059.003, T1003.001, T1078
+Root Cause: User clicked phishing link despite security training
+Lessons Learned: Enable MFA for all finance accounts immediately
+
+---
+
+INCIDENT REPORT: INC-2024-002
+Date: 2024-11-20
+Classification: Brute Force → Database Compromise
+Severity: CRITICAL
+Outcome: Full Incident — Data Exposure Possible
+
+Summary: External brute force against exposed RDP service led to database server compromise.
+Attacker performed SQL queries against customer PII database.
+
+Timeline:
+- 02:00 - Brute force begins against RDP (3000+ attempts)
+- 02:47 - Successful authentication as local admin account
+- 02:50 - Attacker enumerates network, finds database server
+- 03:15 - Lateral movement to SRV-DB-01 via SMB
+- 03:30 - SQL queries executed against customer database
+- 06:00 - Anomaly detected by SIEM (after-hours activity)
+- 06:30 - IR team engaged, systems isolated
+- 12:00 - Forensic analysis complete, breach confirmed
+
+MITRE TTPs: T1110, T1078, T1021.002, T1005
+Root Cause: RDP exposed to internet, no MFA, weak local admin password
+Lessons Learned: Disable RDP from internet, enforce MFA everywhere, network segmentation

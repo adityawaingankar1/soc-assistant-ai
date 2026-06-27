@@ -1,0 +1,38 @@
+MITRE ATT&CK Technique: T1566.001 - Spearphishing Attachment
+Tactic: Initial Access
+Description: Adversaries may send spearphishing emails with a malicious attachment to gain access to victim systems. As a form of spearphishing, these attempts target specific individuals with trojaned documents (Office macros, PDFs with embedded shellcode). Key indicators: suspicious email domains, unexpected attachment types (.docm, .xlsm), process spawning from email clients (outlook.exe, thunderbird.exe).
+Detection: Monitor for office applications spawning unusual child processes. Alert on cmd.exe, powershell.exe, wscript.exe spawned from email client processes.
+Mitigation: M1049 - Antivirus/Antimalware. M1031 - Network Intrusion Prevention. M1017 - User Training.
+
+MITRE ATT&CK Technique: T1486 - Data Encrypted for Impact
+Tactic: Impact
+Description: Adversaries may encrypt data on target systems or on large numbers of systems to interrupt availability. With careful preparation, adversaries may encrypt critical files on a system. This is often associated with ransomware deployment. Indicators: mass file I/O operations, vssadmin deleting shadow copies, deletion of backup catalogs, unusual file extension changes.
+Detection: Monitor for large-scale file modification events. Alert on vssadmin.exe, wmic.exe, and bcdedit.exe execution. Monitor registry changes for bootloader modification.
+Mitigation: M1053 - Data Backup. M1040 - Behavior Prevention on Endpoint.
+
+MITRE ATT&CK Technique: T1078 - Valid Accounts
+Tactic: Initial Access, Defense Evasion, Persistence, Privilege Escalation
+Description: Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion. Compromised credentials may be used to bypass access controls and authenticate as legitimate users.
+Detection: Monitor for logins from unusual times/locations. Alert on impossible travel. Monitor for multiple account lockouts.
+Mitigation: M1036 - Account Use Policies. M1032 - Multi-factor Authentication.
+
+MITRE ATT&CK Technique: T1021 - Remote Services
+Tactic: Lateral Movement
+Description: Adversaries may use Valid Accounts to log into a service specifically designed to accept remote connections, such as telnet, SSH, VNC, RDP, and SMB. Key indicators: successful RDP connections from unusual internal IPs, SMB connections between workstations, pass-the-hash attacks.
+Detection: Monitor for unusual RDP/SMB connections. Alert on lateral movement patterns across subnets.
+
+MITRE ATT&CK Technique: T1110 - Brute Force
+Tactic: Credential Access
+Description: Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained. Multiple failed authentication attempts followed by success is a key pattern.
+Detection: Alert on >5 failed logins in 60 seconds. Monitor for distributed brute force (low-and-slow attacks).
+Mitigation: M1036 - Account Use Policies. M1032 - Multi-factor Authentication.
+
+MITRE ATT&CK Technique: T1055 - Process Injection
+Tactic: Defense Evasion, Privilege Escalation
+Description: Adversaries may inject code into processes to evade process-based defenses and possibly elevate privileges. Process injection is a method of executing arbitrary code in the address space of a separate live process.
+Detection: Monitor for suspicious cross-process memory writes. Alert on unusual parent-child process relationships.
+
+MITRE ATT&CK Technique: T1059.001 - PowerShell
+Tactic: Execution
+Description: Adversaries abuse PowerShell to perform a number of actions including discovery of information and execution of code. Malicious PowerShell can be identified by encoded commands (-enc), bypass execution policy flags, and AMSI bypasses.
+Detection: Enable PowerShell Script Block Logging. Alert on -EncodedCommand, -Bypass, Download cradles.

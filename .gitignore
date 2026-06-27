@@ -1,0 +1,101 @@
+# =========================
+# Environment & Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# Firebase credentials
+firebase-service-account.json
+backend/firebase-service-account.json
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# =========================
+# Node.js
+# =========================
+node_modules/
+frontend/node_modules/
+
+# React build
+frontend/build/
+build/
+
+# =========================
+# Databases
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# Chroma Vector Database
+chroma_store/
+backend/chroma_store/
+
+# Neo4j local data
+neo4j_data/
+neo4j_logs/
+
+# =========================
+# HuggingFace Cache
+# =========================
+huggingface_cache/
+.cache/
+.cache/huggingface/
+
+# =========================
+# Testing
+# =========================
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# Celery
+celerybeat-schedule
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Operating System
+# =========================
+Thumbs.db
+.DS_Store
+
+# =========================
+# Python Packaging
+# =========================
+dist/
+build/
+*.egg-info/
+
+# =========================
+# Temporary Files
+# =========================
+tmp/
+temp/
+*.tmp
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/

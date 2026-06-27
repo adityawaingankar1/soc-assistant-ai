@@ -1,0 +1,30 @@
+{
+  "incident_type": "IDENTITY_COMPROMISE",
+  "version": 2,
+  "actions": [
+    {
+      "id": "id_preserve",
+      "action": "Preserve evidence: export sign-in logs, risky sign-ins, audit logs, and mailbox/app consent changes.",
+      "owner_team": "SOC",
+      "approval_level": "SOC",
+      "risk": "Low",
+      "requires_all": []
+    },
+    {
+      "id": "id_revoke",
+      "action": "Revoke active sessions/refresh tokens for suspected accounts; enforce MFA/Conditional Access.",
+      "owner_team": "IAM",
+      "approval_level": "SOC Lead",
+      "risk": "Medium (user disruption)",
+      "requires_all": ["confidence_ge_0_55"]
+    },
+    {
+      "id": "id_disable_oauth",
+      "action": "Disable suspicious OAuth app consents / token grants if present.",
+      "owner_team": "IAM",
+      "approval_level": "SOC Lead",
+      "risk": "Low/Medium",
+      "requires_all": ["identity_telemetry_signals"]
+    }
+  ]
+}

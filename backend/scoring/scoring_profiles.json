@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "default": {
+    "artifact_rules": [],
+    "corroboration_sources": ["alert_source"]
+  },
+  "WEBAPP_EXPLOIT": {
+    "artifact_rules": [
+      { "match": { "entity_type": "http_header" }, "score": 0.20 },
+      { "match": { "entity_type": "file_path" }, "score": 0.30 }
+    ],
+    "corroboration_sources": ["waf", "iis", "fim", "db_audit"]
+  },
+  "EDGE_EXPLOIT": {
+    "artifact_rules": [
+      { "match": { "entity_type": "config_diff" }, "score": 0.30 }
+    ],
+    "corroboration_sources": ["syslog", "cef", "traffic_logs", "config_diff"]
+  },
+  "IDENTITY_COMPROMISE": {
+    "artifact_rules": [
+      { "match": { "entity_type": "oauth_app" }, "score": 0.35 },
+      { "match": { "entity_type": "mailbox_rule" }, "score": 0.35 }
+    ],
+    "corroboration_sources": ["entra_signinlogs", "m365_audit", "idp"]
+  },
+  "RANSOMWARE": {
+    "artifact_rules": [
+      { "match": { "signal": "VSS_DELETE" }, "score": 0.35 },
+      { "match": { "signal": "RANSOM_NOTE" }, "score": 0.35 }
+    ],
+    "corroboration_sources": ["edr", "file_events", "security_event"]
+  }
+}

@@ -1,0 +1,33 @@
+CVE-2024-3400 - PAN-OS Command Injection
+CVSS Score: 10.0 (CRITICAL)
+Affected: Palo Alto PAN-OS < 11.1.2
+Description: Command injection vulnerability in GlobalProtect feature allows unauthenticated remote code execution.
+Indicators: Unusual process spawning from PAN-OS, unexpected outbound connections from firewall
+Mitigation: Update to PAN-OS 11.1.2 or later. Apply hotfix immediately. Enable Threat Prevention.
+
+CVE-2024-1709 - ConnectWise ScreenConnect Authentication Bypass
+CVSS Score: 10.0 (CRITICAL)
+Affected: ConnectWise ScreenConnect < 23.9.8
+Description: Authentication bypass vulnerability allowing unauthenticated access to ScreenConnect server.
+Indicators: Unauthorized remote access sessions, new user account creation, unusual file transfers
+Mitigation: Update immediately to 23.9.8+. Audit all active sessions. Review user accounts.
+
+CVE-2023-44487 - HTTP/2 Rapid Reset Attack (DDoS)
+CVSS Score: 7.5 (HIGH)
+Affected: Multiple HTTP/2 implementations
+Description: HTTP/2 protocol vulnerability allowing DoS via rapid request cancellation.
+Indicators: Unusual HTTP/2 traffic patterns, server resource exhaustion, connection spikes
+
+CVE-2021-44228 - Log4Shell (Apache Log4j)
+CVSS Score: 10.0 (CRITICAL)
+Affected: Apache Log4j 2.0-beta9 through 2.14.1
+Description: Remote code execution via JNDI injection in log messages. Still actively exploited.
+Indicators: ${jndi:ldap://...} patterns in HTTP headers/user-agent strings, LDAP callbacks to attacker infrastructure
+Mitigation: Update Log4j to 2.17.1+. Apply WAF rules. Monitor for JNDI strings in logs.
+
+CVE-2017-0144 - EternalBlue (SMB)
+CVSS Score: 9.3 (CRITICAL)
+Affected: Windows SMB v1
+Description: Buffer overflow in SMBv1 allows remote code execution. Used by WannaCry/NotPetya.
+Indicators: SMB traffic to unusual hosts, MS17-010 exploitation patterns
+Mitigation: Disable SMBv1. Apply MS17-010 patch. Block port 445 externally.

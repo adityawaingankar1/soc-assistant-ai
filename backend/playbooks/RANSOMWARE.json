@@ -1,0 +1,30 @@
+{
+  "incident_type": "RANSOMWARE",
+  "version": 2,
+  "actions": [
+    {
+      "id": "ran_preserve",
+      "action": "Preserve evidence: memory (if feasible), host artifacts, and SIEM telemetry before remediation.",
+      "owner_team": "SOC",
+      "approval_level": "SOC",
+      "risk": "Low",
+      "requires_all": []
+    },
+    {
+      "id": "ran_isolate",
+      "action": "Isolate affected endpoints/servers via EDR to stop spread (if available).",
+      "owner_team": "SOC",
+      "approval_level": "SOC Lead",
+      "risk": "High (service disruption)",
+      "requires_all": ["asset_class_endpoint_or_server", "edr_available"]
+    },
+    {
+      "id": "ran_restore",
+      "action": "Restore from known-good backups only after containment + eradication; verify backups are clean.",
+      "owner_team": "IT Ops",
+      "approval_level": "IR Lead",
+      "risk": "High",
+      "requires_all": ["ransomware_signals"]
+    }
+  ]
+}

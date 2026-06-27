@@ -1,0 +1,72 @@
+{
+  "version": 3,
+  "description": "Deterministic incident router rules. Priority-sorted. First match wins. Enhanced for ransomware.",
+  "engine": {
+    "sort_by": "priority_desc",
+    "first_match_wins": true
+  },
+  "default": {
+    "incident_type": "INVESTIGATE",
+    "playbook_family": "GENERIC"
+  },
+  "rules": [
+    {
+      "id": "ransomware_strong",
+      "priority": 110,
+      "when_all": ["ransomware_signals"],
+      "when_any": ["destructive_mitre_present"],
+      "set": {
+        "incident_type": "RANSOMWARE",
+        "playbook_family": "RANSOMWARE"
+      }
+    },
+    {
+      "id": "ransomware",
+      "priority": 100,
+      "when_all": ["ransomware_signals"],
+      "set": {
+        "incident_type": "RANSOMWARE",
+        "playbook_family": "RANSOMWARE"
+      }
+    },
+    {
+      "id": "identity_compromise",
+      "priority": 90,
+      "when_all": ["identity_telemetry_signals"],
+      "set": {
+        "incident_type": "IDENTITY_COMPROMISE",
+        "playbook_family": "IDENTITY"
+      }
+    },
+    {
+      "id": "webapp_exploit_strong",
+      "priority": 80,
+      "when_all": ["web_artifact_strong"],
+      "set": {
+        "incident_type": "WEBAPP_EXPLOIT",
+        "playbook_family": "WEBAPP"
+      }
+    },
+    {
+      "id": "webapp_exploit_high_risk",
+      "priority": 70,
+      "when_all": ["high_risk_cve"],
+      "when_any": ["asset_class_server", "asset_class_unknown"],
+      "set": {
+        "incident_type": "WEBAPP_EXPLOIT",
+        "playbook_family": "WEBAPP"
+      }
+    },
+    {
+      "id": "edge_exploit",
+      "priority": 60,
+      "when_all": ["asset_class_edge_appliance"],
+      "when_any": ["high_risk_cve", "internet_facing_true_or_unknown"],
+      "not_if_any": ["identity_telemetry_signals", "web_artifact_strong"],
+      "set": {
+        "incident_type": "EDGE_EXPLOIT",
+        "playbook_family": "EDGE"
+      }
+    }
+  ]
+}

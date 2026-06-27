@@ -1,0 +1,188 @@
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: soc_postgres
+
+    environment:
+      POSTGRES_USER: soc
+      POSTGRES_PASSWORD: soc_password
+      POSTGRES_DB: soc_assistant
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - soc_pgdata:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U soc -d soc_assistant"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+    restart: unless-stopped
+
+  neo4j:
+    image: neo4j:5
+    container_name: soc_neo4j
+
+    environment:
+      NEO4J_AUTH: "neo4j/neo4j_password"
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: "apoc.*"
+      NEO4J_dbms_security_procedures_allowlist: "apoc.*"
+
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+
+    volumes:
+      - soc_neo4j_data:/data
+      - soc_neo4j_logs:/logs
+
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    container_name: soc_redis
+
+    ports:
+      - "6379:6379"
+
+    restart: unless-stopped
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+
+    container_name: soc_celery_worker
+
+    command: >
+      celery
+      -A backend.celery_app.celery_app
+      worker
+      --loglevel=info
+
+    depends_on:
+      - redis
+
+    env_file:
+      - .env
+
+    environment:
+      PYTHONUNBUFFERED: "1"
+
+      # HuggingFace / Transformers cache
+      TRANSFORMERS_CACHE: "/tmp/huggingface"
+      HF_HOME: "/tmp/huggingface"
+
+      # Reduce tokenizer parallel memory spikes
+      TOKENIZERS_PARALLELISM: "false"
+
+      # Firebase
+      FIREBASE_CREDENTIAL_PATH: "/app/firebase-service-account.json"
+
+    volumes:
+      - ./chroma_store:/app/chroma_store
+
+      # Internal Docker volume instead of Windows-mounted cache
+      - huggingface_cache:/tmp/huggingface
+
+      # Firebase Admin SDK JSON
+      - ./backend/firebase-service-account.json:/app/firebase-service-account.json:ro
+
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+
+    container_name: soc_backend
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./chroma_store:/app/chroma_store
+
+      # Internal Docker cache
+      - huggingface_cache:/tmp/huggingface
+
+      # Firebase Admin SDK JSON
+      - ./backend/firebase-service-account.json:/app/firebase-service-account.json:ro
+
+    env_file:
+      - .env
+
+    environment:
+      APP_HOST: 0.0.0.0
+      APP_PORT: 8000
+      PYTHONUNBUFFERED: "1"
+      SQLITE_BUSY_TIMEOUT: "30000"
+
+      # Firebase
+      FIREBASE_CREDENTIAL_PATH: "/app/firebase-service-account.json"
+
+      # HuggingFace / Transformers cache
+      TRANSFORMERS_CACHE: "/tmp/huggingface"
+      HF_HOME: "/tmp/huggingface"
+
+      # Prevent tokenizer thread explosion
+      TOKENIZERS_PARALLELISM: "false"
+
+      # Lower memory fragmentation
+      MALLOC_ARENA_MAX: "2"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      neo4j:
+        condition: service_started
+
+      redis:
+        condition: service_started
+
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+      args:
+        REACT_APP_API_URL: "http://localhost:8000"
+
+        REACT_APP_FIREBASE_API_KEY: "AIzaSyCfHoqwceubSbPh9rRWwBKNxRdF6J4Kbhc"
+        REACT_APP_FIREBASE_AUTH_DOMAIN: "poject-47b81.firebaseapp.com"
+        REACT_APP_FIREBASE_PROJECT_ID: "poject-47b81"
+        REACT_APP_FIREBASE_STORAGE_BUCKET: "poject-47b81.appspot.com"
+        REACT_APP_FIREBASE_MESSAGING_SENDER_ID: "430878183825"
+        REACT_APP_FIREBASE_APP_ID: "1:430878183825:web:dda7e91a91151a402a8a30"
+
+    container_name: soc_frontend
+
+    ports:
+      - "3000:80"
+
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+volumes:
+  soc_pgdata:
+  soc_neo4j_data:
+  soc_neo4j_logs:
+  huggingface_cache:
