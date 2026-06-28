@@ -10,7 +10,7 @@ Please do not open public GitHub issues for security vulnerabilities.
 
 Instead, contact:
 
-your.email@example.com
+adityawaingankar1@gmail.com
 
 Include:
 
@@ -22,7 +22,7 @@ Sensitive reports will be handled confidentially.
 
 ## Security Features
 
-SOCFusion AI implements:
+SOC Assistant AI implements:
 
 - JWT Authentication
 - Firebase Authentication
